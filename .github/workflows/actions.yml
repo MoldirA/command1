@@ -12,30 +12,19 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@master
-
       - name: Build the data and create local changes
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - run: |
           pip install -r requirements.txt
           python process.py
-
-      - name: Display repository status
-        run: |
-          git status
-          git log -n 5
-          git diff
-        shell: bash
-
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit --allow-empty -m "Auto-update of the data package" -a || echo "No changes to commit"
-
+          git commit --allow-empty -m "Auto-update of the data package" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.gh }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
